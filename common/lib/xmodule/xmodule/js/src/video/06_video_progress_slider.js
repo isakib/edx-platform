@@ -42,7 +42,8 @@ function () {
             onStop: onStop,
             updatePlayTime: updatePlayTime,
             updateStartEndTimeRegion: updateStartEndTimeRegion,
-            notifyThroughHandleEnd: notifyThroughHandleEnd
+            notifyThroughHandleEnd: notifyThroughHandleEnd,
+            getTimeDescription: getTimeDescription
         };
 
         state.bindTo(methodsDict, state.videoProgressSlider, state);
@@ -72,7 +73,7 @@ function () {
         // handle, behaves as a slider named 'video position'.
         state.videoProgressSlider.handle.attr({
             'role': 'slider',
-            'title': 'video position',
+            'title': gettext('Video position'),
             'aria-disabled': false,
             'aria-valuetext': getTimeDescription(state.videoProgressSlider
                 .slider.slider('option', 'value'))
@@ -128,14 +129,15 @@ function () {
 
         if (!this.videoProgressSlider.sliderRange) {
             this.videoProgressSlider.sliderRange = $('<div />', {
-                class: 'ui-slider-range ' +
-                       'ui-widget-header ' +
-                       'ui-corner-all ' +
-                       'slider-range'
-            }).css({
-                left: rangeParams.left,
-                width: rangeParams.width
-            });
+                    'class': 'ui-slider-range ' +
+                            'ui-widget-header ' +
+                            'ui-corner-all ' +
+                            'slider-range'
+                })
+                .css({
+                    left: rangeParams.left,
+                    width: rangeParams.width
+                });
 
             this.videoProgressSlider.sliderProgress
                 .after(this.videoProgressSlider.sliderRange);
@@ -227,10 +229,11 @@ function () {
     function notifyThroughHandleEnd(params) {
         if (params.end) {
             this.videoProgressSlider.handle
-                .attr('title', 'video ended')
+                .attr('title', gettext('Video ended'))
                 .focus();
         } else {
-            this.videoProgressSlider.handle.attr('title', 'video position');
+            this.videoProgressSlider.handle
+                .attr('title', gettext('Video position'));
         }
     }
 
@@ -240,48 +243,25 @@ function () {
         var seconds = Math.floor(time),
             minutes = Math.floor(seconds / 60),
             hours = Math.floor(minutes / 60),
-            hrStr, minStr, secStr;
+            pad = function (value, word) {
+                return value + ' ' + gettext(word + (value != 1 ? 's' : ''));
+            };
 
         seconds = seconds % 60;
         minutes = minutes % 60;
 
-        hrStr = hours.toString(10);
-        minStr = minutes.toString(10);
-        secStr = seconds.toString(10);
-
         if (hours) {
-            hrStr += (hours < 2 ? ' hour ' : ' hours ');
-
-            if (minutes) {
-                minStr += (minutes < 2 ? ' minute ' : ' minutes ');
-            } else {
-                minStr += ' 0 minutes ';
-            }
-
-            if (seconds) {
-                secStr += (seconds < 2 ? ' second ' : ' seconds ');
-            } else {
-                secStr += ' 0 seconds ';
-            }
-
-            return hrStr + minStr + secStr;
+            return  pad(hours, 'hour') + ' ' +
+                    pad(minutes, 'minute') + ' ' +
+                    pad(seconds, 'second');
         } else if (minutes) {
-            minStr += (minutes < 2 ? ' minute ' : ' minutes ');
-
-            if (seconds) {
-                secStr += (seconds < 2 ? ' second ' : ' seconds ');
-            } else {
-                secStr += ' 0 seconds ';
-            }
-
-            return minStr + secStr;
+            return  pad(minutes, 'minute') + ' ' +
+                    pad(seconds, 'second');
         } else if (seconds) {
-            secStr += (seconds < 2 ? ' second ' : ' seconds ');
-
-            return secStr;
+            return  pad(seconds, 'second');
         }
 
-        return '0 seconds';
+        return pad(seconds, 'second');
     }
 
 });

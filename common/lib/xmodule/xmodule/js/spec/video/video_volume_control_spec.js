@@ -52,7 +52,7 @@
                  'maximum'];
         expect(sliderHandle).toHaveAttrs({
           'role': 'slider',
-          'title': 'volume',
+          'title': 'Volume',
           'aria-disabled': 'false',
           'aria-valuemin': '0',
           'aria-valuemax': '100'

@@ -94,7 +94,7 @@ function () {
 
         volumeSliderHandleEl.attr({
             'role': 'slider',
-            'title': 'volume',
+            'title': gettext('Volume'),
             'aria-disabled': false,
             'aria-valuemin': slider.slider('option', 'min'),
             'aria-valuemax': slider.slider('option', 'max'),
@@ -238,20 +238,20 @@ function () {
     // Returns a string describing the level of volume.
     function getVolumeDescription(vol) {
         if (vol === 0) {
-            return 'muted';
+            return gettext('muted');
         } else if (vol <= 20) {
-            return 'very low';
+            return gettext('very low');
         } else if (vol <= 40) {
-            return 'low';
+            return gettext('low');
         } else if (vol <= 60) {
-            return 'average';
+            return gettext('average');
         } else if (vol <= 80) {
-            return 'loud';
+            return gettext('loud');
         } else if (vol <= 99) {
-            return 'very loud';
+            return gettext('very loud');
         }
 
-        return 'maximum';
+        return gettext('maximum');
     }
 
 });

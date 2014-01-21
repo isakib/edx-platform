@@ -42,7 +42,7 @@
         var timeControl = $('div.slider>a');
         expect(timeControl).toHaveAttrs({
           'role': 'slider',
-          'title': 'video position',
+          'title': 'Video position',
           'aria-disabled': 'false'
         });
         expect(timeControl).toHaveAttr('aria-valuetext');
