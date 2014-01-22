@@ -134,7 +134,7 @@ class VideoFields(object):
         scope=Scope.user_state,
     )
     global_speed = Float(
-        help="Default speed in cases when speed wasn't explicitly set.",
+        help="Default speed in cases when speed wasn't explicitly for specific video",
         scope=Scope.preferences,
         default=1.0
     )
@@ -179,7 +179,6 @@ class VideoModule(VideoFields, XModule):
     js_module_name = "Video"
 
     def handle_ajax(self, dispatch, data):
-        ''' get = request.POST instance '''
         ACCEPTED_KEYS = ['speed']
 
         if dispatch == 'save_user_state':

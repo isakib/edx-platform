@@ -348,7 +348,7 @@ function (VideoPlayer, CookieStorage) {
                     if ($.isFunction(conversions[option])) {
                         value = conversions[option].call(this, value);
                     } else {
-                        console.log('Error: ' + option + ' is not a function.');
+                        throw new TypeError(option + ' is not a function.');
                     }
                 }
                 config[option] = value;
@@ -638,20 +638,18 @@ function (VideoPlayer, CookieStorage) {
                 '1.25': '1.50',
                 '2.0': '1.50'
             },
-            inArray = _.indexOf(this.speeds, newSpeed) !== -1;
+            useSession = true;
 
-        if (inArray) {
+        if (_.contains(this.speeds, newSpeed)) {
             this.speed = newSpeed;
         } else {
             newSpeed = map[newSpeed];
-            inArray = _.indexOf(this.speeds, newSpeed) !== -1;
-
-            this.speed = inArray ? newSpeed : '1.0';
+            this.speed = _.contains(this.speeds, newSpeed) ? newSpeed : '1.0';
         }
 
         if (updateStorage) {
-            this.storage.setItem('video_speed_' + this.id, this.speed, true);
-            this.storage.setItem('general_speed', this.speed, true);
+            this.storage.setItem('video_speed_' + this.id, this.speed, useSession);
+            this.storage.setItem('general_speed', this.speed, useSession);
         }
     }
 
