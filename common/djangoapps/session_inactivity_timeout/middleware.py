@@ -14,27 +14,27 @@ from django.contrib import auth
 
 
 class SessionInactivityTimeout:
-  """
-  Middleware class to keep track of activity on a given session
-  """
-  def process_request(self, request):
     """
-    Standard entry point for processing requests in Django
+    Middleware class to keep track of activity on a given session
     """
-    if not hasattr(request, "user") or not request.user.is_authenticated() :
-      #Can't log out if not logged in
-      return
+    def process_request(self, request):
+        """
+        Standard entry point for processing requests in Django
+        """
+        if not hasattr(request, "user") or not request.user.is_authenticated() :
+            #Can't log out if not logged in
+            return
 
-    timeout_in_seconds = getattr(settings, "SESSION_INACTIVITY_TIMEOUT_IN_SECONDS", None)
+        timeout_in_seconds = getattr(settings, "SESSION_INACTIVITY_TIMEOUT_IN_SECONDS", None)
 
-    if timeout_in_seconds:
-      try:
-        time_since_last_activity = datetime.now() - request.session['last_touch']
-        if time_since_last_activity > timedelta(0, timeout_in_seconds, 0):
-          auth.logout(request)
-          del request.session['last_touch']
-          return
-      except KeyError:
-        pass
+        if timeout_in_seconds:
+            try:
+                time_since_last_activity = datetime.now() - request.session['last_touch']
+                if time_since_last_activity > timedelta(0, timeout_in_seconds, 0):
+                  auth.logout(request)
+                  del request.session['last_touch']
+                  return
+            except KeyError:
+                pass
 
-    request.session['last_touch'] = datetime.now()
+        request.session['last_touch'] = datetime.now()
