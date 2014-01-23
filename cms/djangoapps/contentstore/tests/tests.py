@@ -197,7 +197,8 @@ class AuthTestCase(ContentStoreTestCase):
         Verify that an inactive session times out and redirects to the
         login page
         """
-        self.test_create_account()
+        self.create_account(self.username, self.email, self.pw)
+        self.activate_user(self.email)
 
         self.login(self.email, self.pw)
 
