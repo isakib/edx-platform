@@ -1,10 +1,10 @@
 """
-Middleware to auto-expire inactive sessions after N minutes, which is configurable in
+Middleware to auto-expire inactive sessions after N seconds, which is configurable in
 settings.
 
 To enable this feature, set in a settings.py:
 
-  SESSION_INACTIVITY_TIMEOUT_IN_MINS = 5
+  SESSION_INACTIVITY_TIMEOUT_IN_SECS = 300
 
 This was taken from StackOverflow (http://stackoverflow.com/questions/14830669/how-to-expire-django-session-in-5minutes)
 """
