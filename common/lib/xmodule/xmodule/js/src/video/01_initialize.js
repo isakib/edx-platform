@@ -687,7 +687,11 @@ function (VideoPlayer, CookieStorage) {
     }
 
     function getDuration() {
-        return this.metadata[this.youtubeId()].duration;
+        try {
+            return this.metadata[this.youtubeId()].duration;
+        } catch (err) {
+            return this.metadata[this.youtubeId('1.0')].duration;
+        }
     }
 
     /*

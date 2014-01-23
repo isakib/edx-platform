@@ -36,7 +36,7 @@
 
                 it('create video caption', function () {
                     expect(state.videoCaption).toBeDefined();
-                    expect(state.youtubeId()).toEqual('Z5KLxerq05Y');
+                    expect(state.youtubeId('1.0')).toEqual('Z5KLxerq05Y');
                     expect(state.speed).toEqual('1.50');
                     expect(state.config.captionAssetPath)
                         .toEqual('/static/subs/');

@@ -35,7 +35,6 @@ from xmodule.fields import RelativeTime
 
 from xmodule.modulestore.inheritance import InheritanceKeyValueStore
 from xblock.runtime import KvsFieldData
-from .exceptions import NotFoundError
 
 log = logging.getLogger(__name__)
 
@@ -224,7 +223,7 @@ class VideoModule(VideoFields, XModule):
             'speed': self.speed or self.global_speed,
             'start': self.start_time.total_seconds(),
             'sub': self.sub,
-            'track': self.track,
+            'track': track_url,
             'youtube_streams': _create_youtube_string(self),
             # TODO: Later on the value 1500 should be taken from some global
             # configuration setting field.

@@ -73,12 +73,12 @@ class TestVideoYouTube(TestVideo):
             'youtube_streams': _create_youtube_string(self.item_module),
             'autoplay': settings.FEATURES.get('AUTOPLAY_VIDEOS', False),
             'yt_test_timeout': 1500,
-            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/'
+            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/',
         }
 
         self.assertEqual(
             context,
-            self.item_module.xmodule_runtime.render_template('video.html', expected_context)
+            self.item_module.xmodule_runtime.render_template('video.html', expected_context),
         )
 
 
@@ -96,7 +96,7 @@ class TestVideoNonYouTube(TestVideo):
         </video>
     """
     MODEL_DATA = {
-        'data': DATA
+        'data': DATA,
     }
     METADATA = {}
 
@@ -127,12 +127,12 @@ class TestVideoNonYouTube(TestVideo):
             'youtube_streams': '1.00:OEoXaMPEzfM',
             'autoplay': settings.FEATURES.get('AUTOPLAY_VIDEOS', True),
             'yt_test_timeout': 1500,
-            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/'
+            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/',
         }
 
         self.assertEqual(
             context,
-            self.item_module.xmodule_runtime.render_template('video.html', expected_context)
+            self.item_module.xmodule_runtime.render_template('video.html', expected_context),
         )
 
 
@@ -181,9 +181,7 @@ class TestVideoGetTranscriptsMethod(TestVideo):
         text = item.get_transcript(subs_id)
         expected_text = "Hi, welcome to Edx.\nLet's start with what is on your screen right now."
 
-        self.assertEqual(
-            text, expected_text
-        )
+        self.assertEqual(text, expected_text)
 
     def test_not_found_error(self):
         self.item_module.render('student_view')
@@ -236,6 +234,7 @@ class TestGetHtmlMethod(BaseTestXmodule):
     """
     CATEGORY = "video"
     DATA = SOURCE_XML
+    maxDiff = None
     METADATA = {}
 
     def setUp(self):
@@ -278,7 +277,7 @@ class TestGetHtmlMethod(BaseTestXmodule):
                 'track': u'<track src="http://www.example.com/track"/>',
                 'sub': u'a_sub_file.srt.sjson',
                 'expected_track_url': None,
-            }
+            },
         ]
 
         expected_context = {
@@ -295,11 +294,12 @@ class TestGetHtmlMethod(BaseTestXmodule):
             },
             'start': 3603.0,
             'sub': u'a_sub_file.srt.sjson',
-            'track': '',
+            'speed': 1.0,
+            'track': None,
             'youtube_streams': '1.00:OEoXaMPEzfM',
             'autoplay': settings.FEATURES.get('AUTOPLAY_VIDEOS', True),
             'yt_test_timeout': 1500,
-            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/'
+            'yt_test_url': 'https://gdata.youtube.com/feeds/api/videos/',
         }
 
         for data in cases:
@@ -312,16 +312,18 @@ class TestGetHtmlMethod(BaseTestXmodule):
             self.initialize_module(data=DATA)
             track_url = self.item_descriptor.xmodule_runtime.handler_url(self.item_module, 'download_transcript')
 
+            context = self.item_module.render('student_view').content
+
             expected_context.update({
+                'ajax_url': self.item_descriptor.xmodule_runtime.ajax_url + '/save_user_state',
                 'track': track_url if data['expected_track_url'] == u'a_sub_file.srt.sjson' else data['expected_track_url'],
                 'sub': data['sub'],
                 'id': self.item_module.location.html_id(),
             })
 
-            context = self.item_module.render('student_view').content
             self.assertEqual(
                 context,
-                self.item_module.xmodule_runtime.render_template('video.html', expected_context)
+                self.item_module.xmodule_runtime.render_template('video.html', expected_context),
             )
 
 
